@@ -70,6 +70,8 @@ void execute_program(instruction *code, int printFlag)
 		IR.opcode = code[PC].opcode;
 		IR.l = code[PC].l;
 		IR.m = code[PC].m;
+		IR.r = code[PC].r;
+
 
 		// Increment for next set of instructions after execution.
 		PC = PC + 1;
@@ -79,6 +81,7 @@ void execute_program(instruction *code, int printFlag)
 		{
 			// LIT   
 			case 1:
+				reg[IR.r] = IR.m;
 				break;
 
 			// RET
@@ -86,31 +89,45 @@ void execute_program(instruction *code, int printFlag)
 				break;
 
 			// LOD
-			case 3:
+			case 3: // NOT 100% sure on this yet
+				if(!(base(IR.l,BP,stack)- Ir.m) < 0 || !(base(IR.l,BP,stack) - Ir.m) >= MAX_STACK_LENGTH)
+					RF[IR.r] = stack[base(IR.l,BP,stack) - reg[IR.m]];
 				break;
 
 			// STO
-			case 4:
+			case 4: // NOT 100% sure on this yet
+				if(!(base(IR.l,BP,stack) - Ir.m) < 0 || !(base(IR.l,BP,stack) - Ir.m) >= MAX_STACK_LENGTH)
+					stack[base(IR.l,BP,stack) - reg[IR.m]] = RF[IR.r];
 				break;
 
 			// CAL
 			case 5:
+				stack[SP + 1] = base(IR.l,BP,stack);
+				stack[SP + 2] = BP;
+				stack[SP + 3] = PC;
+				BP = SP + 1;
+				PC = IR.m;
 				break;
 
 			// INC
 			case 6:
+				SP = SP + IR.m;
 				break;
 
 			// JMP
 			case 7:
+				PC = IR.m;
 				break;
 
 			// JPC
 			case 8:
+				if(reg[IR.r] == 0)
+					PC = IR.m;
 				break;
 
 			// WRT
 			case 9:
+				printf("%d\n",reg[IR.r]);
 				break;
 
 			// RED
