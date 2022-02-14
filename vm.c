@@ -89,17 +89,16 @@ void execute_program(instruction *code, int printFlag)
 				break;
 
 			// LOD
-			case 3: // NOT 100% sure on this yet
-				if(!(base(IR.l,BP,stack)- Ir.m) < 0 || !(base(IR.l,BP,stack) - Ir.m) >= MAX_STACK_LENGTH)
-					RF[IR.r] = stack[base(IR.l,BP,stack) - reg[IR.m]];
+			case 3:
+				if(!(base(IR.l,BP,stack)- IR.m) < 0 || !(base(IR.l,BP,stack) - IR.m) >= MAX_STACK_LENGTH)
+					reg[IR.r] = stack[base(IR.l,BP,stack) - reg[IR.m]];
 				break;
 
 			// STO
-			case 4: // NOT 100% sure on this yet
-				if(!(base(IR.l,BP,stack) - Ir.m) < 0 || !(base(IR.l,BP,stack) - Ir.m) >= MAX_STACK_LENGTH)
-					stack[base(IR.l,BP,stack) - reg[IR.m]] = RF[IR.r];
+			case 4:
+				if(!(base(IR.l,BP,stack) - IR.m) < 0 || !(base(IR.l,BP,stack) - IR.m) >= MAX_STACK_LENGTH)
+					stack[base(IR.l,BP,stack) - reg[IR.m]] = reg[IR.r];
 				break;
-
 			// CAL
 			case 5:
 				stack[SP + 1] = base(IR.l,BP,stack);
