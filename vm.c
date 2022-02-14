@@ -140,18 +140,22 @@ void execute_program(instruction *code, int printFlag)
 
 			// NEG
 			case 12:
+				reg[IR.r]--;
 				break;
 
 			// ADD
 			case 13:
+				reg[IR.r] = reg[IR.m] + reg[IR.l];
 				break;
 
 			// SUB
 			case 14:
+				reg[IR.r] = reg[IR.l] - reg[IR.m];
 				break;
 
 			// MUL
 			case 15:
+				reg[IR.r] = reg[IR.l] * reg[IR.m];
 				break;
 
 			// DIV
