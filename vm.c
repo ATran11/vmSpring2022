@@ -48,6 +48,9 @@ void execute_program(instruction *code, int printFlag)
 	int SP = BP + 1;
 	int PC = 0;
 	instruction IR;
+	char opName[4];
+	int scanInput;
+	int line = 0;
 
 	// Initial stack and register file values are all zero.
 	int stack[MAX_STACK_LENGTH] = {0};
@@ -82,22 +85,37 @@ void execute_program(instruction *code, int printFlag)
 			// LIT   
 			case 1:
 				reg[IR.r] = IR.m;
+				strcpy(opName, "LIT");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// RET
 			case 2:
+				SP = BP - 1;
+				BP = stack[SP + 3];
+				PC = stack[SP + 4];
+				strcpy(opName, "RET");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// LOD
 			case 3: // NOT 100% SURE ON THIS YET
 				if(!(base(IR.l,BP,stack)- IR.m) < 0 || !(base(IR.l,BP,stack) - IR.m) >= MAX_STACK_LENGTH)
 					reg[IR.r] = stack[base(IR.l,BP,stack) - reg[IR.m]];
+				strcpy(opName, "LOD");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// STO
 			case 4: // NOT 100% SURE ON THIS YET
 				if(!(base(IR.l,BP,stack) - IR.m) < 0 || !(base(IR.l,BP,stack) - IR.m) >= MAX_STACK_LENGTH)
 					stack[base(IR.l,BP,stack) - reg[IR.m]] = reg[IR.r];
+				strcpy(opName, "STO");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 			// CAL
 			case 5:
@@ -106,102 +124,168 @@ void execute_program(instruction *code, int printFlag)
 				stack[SP + 3] = PC;
 				BP = SP + 1;
 				PC = IR.m;
+				strcpy(opName, "CAL");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// INC
 			case 6:
 				SP = SP + IR.m;
+				strcpy(opName, "INC");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// JMP
 			case 7:
 				PC = IR.m;
+				strcpy(opName, "JMP");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// JPC
 			case 8:
 				if(reg[IR.r] == 0)
 					PC = IR.m;
+				strcpy(opName, "JPC");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// WRT
 			case 9:
 				printf("%d\n",reg[IR.r]);
+				strcpy(opName, "WRT");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// RED
 			case 10:
+				printf("Enter an Integer: ");
+				scanf("%d", &scanInput);
+				reg[IR.r] = scanInput;
+				strcpy(opName, "RED");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// HAL   0 0 0   End of program (Set Halt flag to true).
 			case 11:
 				haltFlag = 1;
+				strcpy(opName, "HAL");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// NEG
 			case 12:
 				reg[IR.r]--;
+				strcpy(opName, "NEG");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// ADD
 			case 13:
 				reg[IR.r] = reg[IR.m] + reg[IR.l];
+				strcpy(opName, "ADD");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// SUB
 			case 14:
 				reg[IR.r] = reg[IR.l] - reg[IR.m];
+				strcpy(opName, "SUB");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// MUL
 			case 15:
 				reg[IR.r] = reg[IR.l] * reg[IR.m];
+				strcpy(opName, "MUL");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// DIV
 			case 16:
 				reg[IR.r] = reg[IR.l] / reg[IR.m];
+				strcpy(opName, "DIV");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// MOD
 			case 17:
 				reg[IR.r] = reg[IR.l] % reg[IR.m];
+				strcpy(opName, "MOD");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// EQL
 			case 18:
 				if(reg[IR.l] == reg[IR.m]) reg[IR.r] = 1;
 				else reg[IR.r] = 0;
+
+				strcpy(opName, "EQL");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// NEQ
 			case 19:
 				if(reg[IR.l] != reg[IR.m]) reg[IR.r] = 1;
 				else reg[IR.r] = 0;
+
+				strcpy(opName, "NEQ");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// LSS
 			case 20:
 				if(reg[IR.l] < reg[IR.m]) reg[IR.r] = 1;
 				else reg[IR.r] = 0;
+
+				strcpy(opName, "LSS");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// LEQ
 			case 21:
 				if(reg[IR.l] <= reg[IR.m]) reg[IR.r] = 1;
 				else reg[IR.r] = 0;
+
+				strcpy(opName, "LEQ");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// GTR
 			case 22:
 				if(reg[IR.l] > reg[IR.m]) reg[IR.r] = 1;
 				else reg[IR.r] = 0;
+
+				strcpy(opName, "GTR");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 
 			// GEQ
 			case 23:
 				if(reg[IR.l] >= reg[IR.m]) reg[IR.r] = 1;
 				else reg[IR.r] = 0;
+
+				strcpy(opName, "GEQ");
+				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
+				line++;
 				break;
 		}
 
