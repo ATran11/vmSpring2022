@@ -160,34 +160,48 @@ void execute_program(instruction *code, int printFlag)
 
 			// DIV
 			case 16:
+				reg[IR.r] = reg[IR.l] / reg[IR.m];
 				break;
 
 			// MOD
 			case 17:
+				reg[IR.r] = reg[IR.l] % reg[IR.m];
 				break;
 
 			// EQL
 			case 18:
+				if(reg[IR.l] == reg[IR.m]) reg[IR.r] = 1;
+				else reg[IR.r] = 0;
 				break;
 
 			// NEQ
 			case 19:
+				if(reg[IR.l] != reg[IR.m]) reg[IR.r] = 1;
+				else reg[IR.r] = 0;
 				break;
 
 			// LSS
 			case 20:
+				if(reg[IR.l] < reg[IR.m]) reg[IR.r] = 1;
+				else reg[IR.r] = 0;
 				break;
 
 			// LEQ
 			case 21:
+				if(reg[IR.l] <= reg[IR.m]) reg[IR.r] = 1;
+				else reg[IR.r] = 0;
 				break;
 
 			// GTR
 			case 22:
+				if(reg[IR.l] > reg[IR.m]) reg[IR.r] = 1;
+				else reg[IR.r] = 0;
 				break;
 
 			// GEQ
 			case 23:
+				if(reg[IR.l] >= reg[IR.m]) reg[IR.r] = 1;
+				else reg[IR.r] = 0;
 				break;
 		}
 
