@@ -93,8 +93,8 @@ void execute_program(instruction *code, int printFlag)
 			// RET
 			case 2:
 				SP = BP - 1;
-				BP = stack[SP + 3];
-				PC = stack[SP + 4];
+				BP = stack[SP + 2];
+				PC = stack[SP + 3];
 				strcpy(opName, "RET");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
 				line++;
