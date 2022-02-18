@@ -172,10 +172,10 @@ void execute_program(instruction *code, int printFlag)
 				line = PC;
 				break;
 
-			// HAL   0 0 0   End of program (Set Halt flag to true).
+			// HLT   0 0 0   End of program (Set Halt flag to true).
 			case 11:
 				haltFlag = 1;
-				strcpy(opName, "HAL");
+				strcpy(opName, "HLT");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
 				line = PC;
 				break;
