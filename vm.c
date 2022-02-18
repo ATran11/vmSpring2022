@@ -156,7 +156,7 @@ void execute_program(instruction *code, int printFlag)
 
 			// WRT
 			case 9:
-				printf("%d\n",reg[IR.r]);
+				printf("Write Value: %d\n",reg[IR.r]);
 				strcpy(opName, "WRT");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
 				line = PC;
@@ -164,7 +164,7 @@ void execute_program(instruction *code, int printFlag)
 
 			// RED
 			case 10:
-				printf("Enter an Integer: ");
+				printf("Please Enter a Value:\n");
 				scanf("%d", &scanInput);
 				reg[IR.r] = scanInput;
 				strcpy(opName, "RED");
