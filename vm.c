@@ -131,7 +131,7 @@ void execute_program(instruction *code, int printFlag)
 
 			// INC
 			case 6:
-				SP = SP + IR.m;
+				SP = SP - IR.m;
 				strcpy(opName, "INC");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
 				line++;
