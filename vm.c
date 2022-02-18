@@ -122,7 +122,7 @@ void execute_program(instruction *code, int printFlag)
 				stack[SP + 1] = base(IR.l,BP,stack);
 				stack[SP + 2] = BP;
 				stack[SP + 3] = PC;
-				BP = SP + 1;
+				BP = SP - 1;
 				PC = IR.m;
 				strcpy(opName, "CAL");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
