@@ -87,7 +87,7 @@ void execute_program(instruction *code, int printFlag)
 				reg[IR.r] = IR.m;
 				strcpy(opName, "LIT");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// RET
@@ -97,7 +97,7 @@ void execute_program(instruction *code, int printFlag)
 				PC = stack[SP + 3];
 				strcpy(opName, "RET");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// LOD
@@ -115,7 +115,7 @@ void execute_program(instruction *code, int printFlag)
 					stack[base(IR.l,BP,stack) - reg[IR.m]] = reg[IR.r];
 				strcpy(opName, "STO");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 			// CAL
 			case 5:
@@ -126,7 +126,7 @@ void execute_program(instruction *code, int printFlag)
 				PC = IR.m;
 				strcpy(opName, "CAL");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// INC
@@ -134,7 +134,7 @@ void execute_program(instruction *code, int printFlag)
 				SP = SP - IR.m;
 				strcpy(opName, "INC");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// JMP
@@ -142,7 +142,7 @@ void execute_program(instruction *code, int printFlag)
 				PC = IR.m;
 				strcpy(opName, "JMP");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// JPC
@@ -151,7 +151,7 @@ void execute_program(instruction *code, int printFlag)
 					PC = IR.m;
 				strcpy(opName, "JPC");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// WRT
@@ -169,7 +169,7 @@ void execute_program(instruction *code, int printFlag)
 				reg[IR.r] = scanInput;
 				strcpy(opName, "RED");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// HAL   0 0 0   End of program (Set Halt flag to true).
@@ -177,7 +177,7 @@ void execute_program(instruction *code, int printFlag)
 				haltFlag = 1;
 				strcpy(opName, "HAL");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// NEG
@@ -185,7 +185,7 @@ void execute_program(instruction *code, int printFlag)
 				reg[IR.r]--;
 				strcpy(opName, "NEG");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// ADD
@@ -193,7 +193,7 @@ void execute_program(instruction *code, int printFlag)
 				reg[IR.r] = reg[IR.m] + reg[IR.l];
 				strcpy(opName, "ADD");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// SUB
@@ -201,7 +201,7 @@ void execute_program(instruction *code, int printFlag)
 				reg[IR.r] = reg[IR.l] - reg[IR.m];
 				strcpy(opName, "SUB");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// MUL
@@ -209,7 +209,7 @@ void execute_program(instruction *code, int printFlag)
 				reg[IR.r] = reg[IR.l] * reg[IR.m];
 				strcpy(opName, "MUL");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// DIV
@@ -217,7 +217,7 @@ void execute_program(instruction *code, int printFlag)
 				reg[IR.r] = reg[IR.l] / reg[IR.m];
 				strcpy(opName, "DIV");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// MOD
@@ -225,7 +225,7 @@ void execute_program(instruction *code, int printFlag)
 				reg[IR.r] = reg[IR.l] % reg[IR.m];
 				strcpy(opName, "MOD");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// EQL
@@ -235,7 +235,7 @@ void execute_program(instruction *code, int printFlag)
 
 				strcpy(opName, "EQL");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// NEQ
@@ -245,7 +245,7 @@ void execute_program(instruction *code, int printFlag)
 
 				strcpy(opName, "NEQ");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// LSS
@@ -255,7 +255,7 @@ void execute_program(instruction *code, int printFlag)
 
 				strcpy(opName, "LSS");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// LEQ
@@ -265,7 +265,7 @@ void execute_program(instruction *code, int printFlag)
 
 				strcpy(opName, "LEQ");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// GTR
@@ -275,7 +275,7 @@ void execute_program(instruction *code, int printFlag)
 
 				strcpy(opName, "GTR");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// GEQ
@@ -285,7 +285,7 @@ void execute_program(instruction *code, int printFlag)
 
 				strcpy(opName, "GEQ");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 		}
 
