@@ -119,9 +119,9 @@ void execute_program(instruction *code, int printFlag)
 				break;
 			// CAL
 			case 5:
-				stack[SP + 1] = base(IR.l,BP,stack);
-				stack[SP + 2] = BP;
-				stack[SP + 3] = PC;
+				stack[SP] = base(IR.l,BP,stack);
+				stack[SP + 1] = BP;
+				stack[SP + 2] = PC;
 				BP = SP - 1;
 				PC = IR.m;
 				strcpy(opName, "CAL");
