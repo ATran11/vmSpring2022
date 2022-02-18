@@ -159,7 +159,7 @@ void execute_program(instruction *code, int printFlag)
 				printf("%d\n",reg[IR.r]);
 				strcpy(opName, "WRT");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
-				line++;
+				line = PC;
 				break;
 
 			// RED
