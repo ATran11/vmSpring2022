@@ -4,6 +4,10 @@
 		printf("Virtual Machine Error: Out of Bounds Access Error\n");
 */
 
+// Anthony Tran
+// Gabriel De David
+// Gani Begawala
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
