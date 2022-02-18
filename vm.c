@@ -182,8 +182,7 @@ void execute_program(instruction *code, int printFlag)
 
 			// NEG
 			case 12:
-				reg[IR.r]--;
-				reg[IR.r]--;
+				reg[IR.r] *= -1;
 				strcpy(opName, "NEG");
 				print_execution(line, opName, IR, PC, BP, SP, stack, reg);
 				line = PC;
