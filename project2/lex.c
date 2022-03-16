@@ -18,7 +18,60 @@ int reservedcheck(char *buffer);
 void printlexerror(int type);
 void printtokens();
 
+void main() 
+{
+	//Loop to go through the input file
+	for(... ) 
+	{	
+		//Check if currCharacter is a whitespace (isSpace and isCtrl)
+		if()
+		{
 
+		}
+	
+		//Check if currCharacter is a number (isDigit) and check for (2. Number Length)
+		else if(isDigit(currCharacter) && /*check for 2. Number Length)*/)
+			
+			while(isDigit(currCharacter) && /*check for 2. Number Length)*/)
+			{
+				
+			}
+	
+			//Error handling for isDigit
+			// If we break from previous while loop, we need to check why we broke out to print the correct error message 
+			// Check if our numCount == 6 and if next currCharcter is a digit then its a NUMBER LENGHT ERROR
+			if(...)
+			{
+			
+			}
+			
+			// Check if our numCount == 6 and if next currCharcter is a letter then its a INVALID IDENTIFIER ERROR
+			if(...)
+			{
+				
+			}
+		}
+		
+		
+		//Check if currCharacter is a charactr (isAlpha) and check for (3. Identifier Length error)
+		else if()
+		{
+			while(....)
+			{
+			
+			}
+		}
+		else {
+			//Switch cases for symbol checking
+			
+			
+			
+			
+			//DEFAULT: Handle case for (4. Invalid Symbol)
+		}
+			
+	}
+}
 lexeme *lexanalyzer(char *input, int printFlag)
 {
 	list = malloc(sizeof(lexeme) * MAX_NUMBER_TOKENS);
@@ -27,6 +80,8 @@ lexeme *lexanalyzer(char *input, int printFlag)
 	if (printFlag)
 		printtokens();
 	list[lex_index++].type = -1;
+	
+	//Loop to go through the input file
 	return list;
 }
 
