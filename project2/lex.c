@@ -20,8 +20,11 @@ void printtokens();
 
 void main() 
 {
-	//Loop to go through the input file
-	for(... ) 
+	//Opens the text file for reading
+	FILE *f = fopen("allthesymbols.txt", "r");
+        char currCharacter;
+	//Loop to go through the input file until it reaches EOF
+	while(fscanf(f, "%c", &currCharacter)!= EOF) 
 	{	
 		//Check if currCharacter is a whitespace (isSpace and isCtrl)
 		if()
