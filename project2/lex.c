@@ -33,23 +33,29 @@ void main()
 		}
 	
 		//Check if currCharacter is a number (isDigit) and check for (2. Number Length)
-		else if(isDigit(currCharacter) && /*check for 2. Number Length)*/)
-			
-			while(isDigit(currCharacter) && /*check for 2. Number Length)*/)
+		else if(isDigit(currCharacter) && numCount < 6)
+		{	
+			while(isDigit(currCharacter) && numCount < 6)
 			{
 				
 			}
-	
+			
 			//Error handling for isDigit
 			// If we break from previous while loop, we need to check why we broke out to print the correct error message 
 			// Check if our numCount == 6 and if next currCharcter is a digit then its a NUMBER LENGHT ERROR
-			if(...)
+			char *c = getc(f);
+			if(numCount == 6 && isDigit(c))
 			{
 			
 			}
 			
 			// Check if our numCount == 6 and if next currCharcter is a letter then its a INVALID IDENTIFIER ERROR
-			if(...)
+			else if(numCount == 6 && isAlpha(c))
+			{
+				
+			}
+			//Else tokenize our number
+			else 
 			{
 				
 			}
@@ -57,11 +63,17 @@ void main()
 		
 		
 		//Check if currCharacter is a charactr (isAlpha) and check for (3. Identifier Length error)
-		else if()
+		else if(isAlpha(currCharacter) && alphaCount < 12)
 		{
-			while(....)
+			while(isAlpha(currCharacter) && alphaCount < 12)
 			{
 			
+			}
+			
+			//Check for (3. Identfier Length Error)
+			if(alphaCount == 12 && /*Check for (3. Identfier Length Error)*/)
+			{
+				
 			}
 		}
 		else {
