@@ -180,6 +180,50 @@ int comment(char *input)
 // Check for reserved words.
 int reservedcheck(char *buffer)
 {
+	if(strcmp(buffer, "var") == 0)
+   {
+       list[lex_index++].type = varsym;
+   }
+   else if(strcmp(buffer, "procedure") == 0)
+   {
+        list[lex_index++].type = procsym;
+   }
+   else if(strcmp(buffer, "call") == 0)
+   {
+        list[lex_index++].type = callsym;
+   }
+   else if(strcmp(buffer, "begin") == 0)
+   {
+       list[lex_index++].type = beginsym;
+   }
+   else if(strcmp(buffer, "end") == 0)
+   {
+        list[lex_index++].type = endsym;
+   }
+   else if(strcmp(buffer, "if") == 0)
+   {
+        list[lex_index++].type = ifsym;
+   }
+   else if(strcmp(buffer, "do") == 0)
+   {
+        list[lex_index++].type = dosym;
+   }
+   else if(strcmp(buffer, "while") == 0)
+   {
+        list[lex_index++].type = whilesym;
+   }
+    else if(strcmp(buffer, "read") == 0)
+   {
+        list[lex_index++].type = readsym;
+   }
+    else if(strcmp(buffer, "write") == 0)
+   {
+        list[lex_index++].type = writesym;
+   }
+   else
+   {
+        list[lex_index++].type = identsym;
+   }
 	return 0;
 }
 
