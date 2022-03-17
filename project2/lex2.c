@@ -40,7 +40,8 @@ int numbertoken(char *input)
 	// While input is a number copy over to temporary array.
 	while(isdigit(input[inputIndex]) && tempIndex <= MAX_NUMBER_LEN)
 	{
-		temp[tempIndex++] = input[inputIndex++];
+		temp[tempIndex] = input[inputIndex];
+		inputIndex++;
 	}
 	
 	// If we break from previous while loop, we need to check why we broke out to print the correct error message 
