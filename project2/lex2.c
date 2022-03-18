@@ -183,7 +183,7 @@ int symboltoken(char *input)
 			// Check for comment.
 			if (input[inputIndex + 1] == '/')
 			{
-				return 0;
+				return 4;
 			}
 			// Otherwise it's a divide symbol.
 			list[lex_index++].type = divsym;
