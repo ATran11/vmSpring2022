@@ -19,7 +19,7 @@ int errorCheck = 0;
 int alphatoken(char *input);
 int numbertoken(char *input);
 int symboltoken(char *input);
-int comment(char *input);
+void comment(char *input, int inputIndex);
 int reservedcheck(char *buffer);
 void printlexerror(int type);
 void printtokens();
@@ -28,18 +28,14 @@ void printtokens();
 int alphatoken(char *input)
 {
     //NOT SURE TO INITALIZE TEMP ARRAY TO 1000...
-    char temp[1000];
+    char temp[MAX_NUMBER_TOKENS];
     int tempindex = 0;
     while(input[inputIndex] != '\0')
     {
-        //if current character is a comment NOT SURE IF THIS WORKS	
+        //if current character is a comment 	
 	if(input[inputIndex] == '/' && input[inputIndex +1] == '/')
 	{
-		//move the inputIndex until the comment is finished 
-		while(input[inputIndex] != '\n' || input[inputIndex] != '\r\n')
-		      {
-			      inputIndex++;
-		      }
+		comment(input, inputIndex);
 	}
         //if current character its a letter
         else if(isalpha(input[inputIndex]) != 0)
@@ -57,7 +53,7 @@ int alphatoken(char *input)
     while( token != NULL ) {
       reservedcheck(token);
  //Check if identifier length is greater than 11; returns 3 if identifier is out of range.
-      if(strlen(token) > 11)
+      if(strlen(token) > MAX_IDENT_LEN)
       {
           return 3;
       }
@@ -73,7 +69,7 @@ int numbertoken(char *input)
 	int tempIndex = 0;
 
 	// While input is a number copy over to temporary array.
-	while(isdigit(input[inputIndex]) && tempIndex <= MAX_NUMBER_LEN)
+	while(isdigit(input[inputIndex]) != 0 && tempIndex <= MAX_NUMBER_LEN)
 	{
 		temp[tempIndex++] = input[inputIndex++];
 	}
@@ -86,7 +82,7 @@ int numbertoken(char *input)
 	}
 	
 	// Check if next current Character is a letter then its a INVALID IDENTIFIER ERROR
-	if(isalpha(input[inputIndex]))
+	if(isalpha(input[inputIndex]) != 0)
 	{
 		return 1;
 	}
@@ -187,8 +183,7 @@ int symboltoken(char *input)
 			// Check for comment.
 			if (input[inputIndex + 1] == '/')
 			{
-				errorCheck = comment(input);
-				return errorCheck;
+				return 0;
 			}
 			// Otherwise it's a divide symbol.
 			list[lex_index++].type = divsym;
@@ -206,9 +201,13 @@ int symboltoken(char *input)
 }
 
 // Check for comment.
-int comment(char *input)
+void comment(char *input, int inputIndex)
 {
-	return 0;
+	//move the inputIndex until the comment is finished 
+	while(input[inputIndex] != '\n' || input[inputIndex] != '\r\n')
+      	{
+		inputIndex++;
+	}
 }
 
 
