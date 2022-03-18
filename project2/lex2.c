@@ -27,7 +27,42 @@ void printtokens();
 // Check for word.
 int alphatoken(char *input)
 {
-	return 0;
+    //NOT SURE TO INITALIZE TEMP ARRAY TO 1000...
+    char temp[1000];
+    int tempindex = 0;
+    while(input[inputIndex] != '\0')
+    {
+        //if current character is a comment NOT SURE IF THIS WORKS	
+	if(input[inputIndex] == '/' && input[inputIndex +1] == '/')
+	{
+		//move the inputIndex until the comment is finished 
+		while(input[inputIndex] != '\n' || input[inputIndex] != '\r\n')
+		      {
+			      inputIndex++;
+		      }
+	}
+        //if current character its a letter
+        else if(isalpha(input[inputIndex]) != 0)
+        {
+            temp[tempindex++] = input[inputIndex++];
+        }
+	//if current character it is any type of whitespace replace it with single space 
+        else if(iscntrl(input[inputIndex]) != 0 || isspace(input[inputIndex]) != 0)
+        {
+            temp[tempindex++] = ' ';
+        }
+    }
+    //split up the words as individual strings
+    char *token = strtok(words , " \t\n\r");
+    while( token != NULL ) {
+      reservedcheck(token);
+ //Check if identifier length is greater than 11; returns 3 if identifier is out of range.
+      if(strlen(token) > 11)
+      {
+          return 3;
+      }
+      token = strtok(NULL, " ");
+    }
 }
 
 // Check for number.
