@@ -48,6 +48,7 @@ int alphatoken(char *input)
             temp[tempindex++] = ' ';
         }
     }
+    char *words;
     //split up the words as individual strings
     char *token = strtok(words , " \t\n\r");
     while( token != NULL ) {
@@ -204,7 +205,7 @@ int symboltoken(char *input)
 void comment(char *input, int inputIndex)
 {
 	//move the inputIndex until the comment is finished 
-	while(input[inputIndex] != '\n' || input[inputIndex] != '\r\n')
+	while(input[inputIndex] != '\n')
       	{
 		inputIndex++;
 	}
