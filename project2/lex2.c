@@ -51,12 +51,13 @@ int alphatoken(char *input)
     //split up the words as individual strings
     char *token = strtok(temp , " \t\n\r");
     while( token != NULL ) {
-      reservedcheck(token);
+      
  //Check if identifier length is greater than 11; returns 3 if identifier is out of range.
       if(strlen(token) > MAX_IDENT_LEN)
       {
           return 3;
       }
+      reservedcheck(token);
       token = strtok(NULL, " ");
     }
 }
