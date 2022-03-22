@@ -10,93 +10,347 @@
 lexeme *list;
 int lex_index;
 
-int alphatoken();
-int numbertoken();
-int symboltoken();
-int comment();
+int alphatoken(char * input, int inputIndex);
+int numbertoken(char * input, int inputIndex);
+int symboltoken(char * input, int inputIndex);
 int reservedcheck(char *buffer);
 void printlexerror(int type);
 void printtokens();
 
-void main() 
+// Check for word.
+int alphatoken(char * input, int inputIndex)
 {
-	//Opens the text file for reading
-	FILE *f = fopen("allthesymbols.txt", "r");
-        char currCharacter;
-	//Loop to go through the input file until it reaches EOF
-	while(fscanf(f, "%c", &currCharacter)!= EOF) 
-	{	
-		//Check if currCharacter is a whitespace (isSpace and isCtrl)
-		if()
-		{
-
-		}
+	// Create temp array to hold letters.
+	char buffer[MAX_IDENT_LEN + 1] = "\0";
+	strncat(buffer, &input[inputIndex], 1);
 	
-		//Check if currCharacter is a number (isDigit) and check for (2. Number Length)
-		else if(isDigit(currCharacter) && numCount < 6)
-		{	
-			while(isDigit(currCharacter) && numCount < 6)
-			{
-				
-			}
-			
-			//Error handling for isDigit
-			// If we break from previous while loop, we need to check why we broke out to print the correct error message 
-			// Check if our numCount == 6 and if next currCharcter is a digit then its a NUMBER LENGHT ERROR
-			char *c = getc(f);
-			if(numCount == 6 && isDigit(c))
-			{
-			
-			}
-			
-			// Check if our numCount == 6 and if next currCharcter is a letter then its a INVALID IDENTIFIER ERROR
-			else if(numCount == 6 && isAlpha(c))
-			{
-				
-			}
-			//Else tokenize our number
-			else 
-			{
-				
-			}
-		}
-		
-		
-		//Check if currCharacter is a charactr (isAlpha) and check for (3. Identifier Length error)
-		else if(isAlpha(currCharacter) && alphaCount < 12)
+  	// As long as the input is a letter or number we add to temp array and increment.
+	while (strlen(buffer) < MAX_IDENT_LEN + 1)
+	{
+		if (isalnum(input[inputIndex + 1]))
 		{
-			while(isAlpha(currCharacter) && alphaCount < 12)
-			{
-			
-			}
-			
-			//Check for (3. Identfier Length Error)
-			if(alphaCount == 12 && /*Check for (3. Identfier Length Error)*/)
-			{
-				
-			}
+			inputIndex++;
+			strncat(buffer, &input[inputIndex], 1);
+			continue;
 		}
-		else {
-			//Switch cases for symbol checking
-			
-			
-			
-			
-			//DEFAULT: Handle case for (4. Invalid Symbol)
-		}
-			
+		
+		break;
 	}
+	
+	// Check for identifier length (3. Identfier Length).
+	if (strlen(buffer) == MAX_IDENT_LEN + 1)
+		return -3;
+	
+	// Check if it's a reserved word otherwise it's an identifier.
+	if (reservedcheck(buffer) == 0)
+	{
+		list[lex_index].type = identsym;
+		strcpy(list[lex_index++].name, buffer);
+	}
+ 
+	return ++inputIndex;
 }
+
+// Check for reserved words.
+int reservedcheck(char *buffer)
+{
+	if(strcmp(buffer, "var") == 0)
+   {
+       list[lex_index++].type = varsym;
+   }
+   else if(strcmp(buffer, "procedure") == 0)
+   {
+        list[lex_index++].type = procsym;
+   }
+   else if(strcmp(buffer, "call") == 0)
+   {
+        list[lex_index++].type = callsym;
+   }
+   else if(strcmp(buffer, "begin") == 0)
+   {
+       list[lex_index++].type = beginsym;
+   }
+   else if(strcmp(buffer, "end") == 0)
+   {
+        list[lex_index++].type = endsym;
+   }
+   else if(strcmp(buffer, "if") == 0)
+   {
+        list[lex_index++].type = ifsym;
+   }
+   else if(strcmp(buffer, "do") == 0)
+   {
+        list[lex_index++].type = dosym;
+   }
+   else if(strcmp(buffer, "while") == 0)
+   {
+        list[lex_index++].type = whilesym;
+   }
+    else if(strcmp(buffer, "read") == 0)
+   {
+        list[lex_index++].type = readsym;
+   }
+    else if(strcmp(buffer, "write") == 0)
+   {
+        list[lex_index++].type = writesym;
+   }
+   else
+   {
+        return 0;
+   }
+	
+	return 1;
+}
+
+// Check for number.
+int numbertoken(char * input, int inputIndex)
+{
+	// Create temp array to hold numbers.
+	char buffer[MAX_NUMBER_LEN + 1] = "\0";
+	strncat(buffer, &input[inputIndex], 1);
+	
+  	// As long as the input is a number we add to temp array and increment.
+	while (strlen(buffer) < MAX_NUMBER_LEN + 1)
+	{
+		// Check if next current Character is a letter then its a INVALID IDENTIFIER ERROR (1. Invalid Identifier)
+		if (isalpha(input[inputIndex + 1]))
+			return -1;
+		// If it's a number we add to buffer and continue.
+		else if (isdigit(input[inputIndex + 1]))
+		{
+			inputIndex++;
+			strncat(buffer, &input[inputIndex], 1);
+			continue;
+		}
+
+		break;
+	}
+	
+	// If we break from previous while loop, we need to check why we broke out to print the correct error message 
+	// Check if our numCount == 6 then its a NUMBER LENGTH ERROR (2. Number Length)
+	if (strlen(buffer) == MAX_NUMBER_LEN + 1)
+		return -2;
+	
+	list[lex_index].type = numbersym;
+  	strcpy(list[lex_index].name, "numbersym");
+	list[lex_index++].value = atoi(buffer);
+	return ++inputIndex;
+}
+
+// Check for special symbols.
+int symboltoken(char * input, int inputIndex)
+{
+	// Create temp array to hold symbols.
+  	char buffer[] = {input[inputIndex], '\0'};
+  
+	switch (input[inputIndex])
+	{
+		case '.':
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = periodsym;
+			return ++inputIndex;
+		case '[':
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = lbracketsym;
+			return ++inputIndex;
+		case ']':
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = rbracketsym;
+			return ++inputIndex;
+		case ',':
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = commasym;
+			return ++inputIndex;
+		case ';':
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = semicolonsym;
+			return ++inputIndex;
+		case ':':
+			if (input[inputIndex + 1] == '=')
+			{
+        		char tempString[] = {':', '=', '\0'};
+        		strcpy(list[lex_index].name, tempString);
+				list[lex_index++].type = assignsym;
+				return inputIndex + 2;
+			}
+
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = colonsym;
+			return ++inputIndex;
+		case '?':
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = questionsym;
+			return ++inputIndex;
+		case '(':
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = lparenthesissym;
+			return ++inputIndex;
+		case ')':
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = rparenthesissym;
+			return ++inputIndex;
+		case '=':
+			if (input[inputIndex + 1] == '=')
+			{
+        		char tempString[] = {'=', '=', '\0'};
+        		strcpy(list[lex_index].name, tempString);
+				list[lex_index++].type = eqlsym;
+				return inputIndex + 2;
+			}
+			// '=' is not a valid symbol (4. Invalid Symbol)
+			return -4;
+		case '<':
+			if (input[inputIndex + 1] == '>')
+			{
+        		char tempString[] = {'<', '>', '\0'};
+        		strcpy(list[lex_index].name, tempString);
+				list[lex_index++].type = neqsym;
+				return inputIndex + 2;
+			}
+			
+			if (input[inputIndex + 1] == '=')
+			{
+        		char tempString[] = {'<', '=', '\0'};
+        		strcpy(list[lex_index].name, tempString);
+				list[lex_index++].type = leqsym;
+				return inputIndex + 2;
+			}
+			
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = lsssym;
+			return ++inputIndex;
+		case '>':
+			if (input[inputIndex + 1] == '=')
+			{
+        		char tempString[] = {'>', '=', '\0'};
+        		strcpy(list[lex_index].name, tempString);
+				list[lex_index++].type = geqsym;
+				return inputIndex + 2;
+			}
+			
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = gtrsym;
+			return ++inputIndex;
+		case '+':
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = addsym;
+			return ++inputIndex;
+		case '-':
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = subsym;
+			return ++inputIndex;
+		case '*':
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = multsym;
+			return ++inputIndex;
+		case '/':
+			// Check for comment.
+			if (input[inputIndex + 1] == '/')
+			{
+				++inputIndex;
+        		buffer[0] = input[inputIndex];
+        
+				while (input[inputIndex] != '\n' && input[inputIndex] != '\0')
+				{
+					++inputIndex;
+          			buffer[0] = input[inputIndex];
+				}
+        
+				return inputIndex;
+			}
+			// Otherwise it's a divide symbol.
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = divsym;
+			return ++inputIndex;
+		case '%':
+      		strcpy(list[lex_index].name, buffer);
+			list[lex_index++].type = modsym;
+			return ++inputIndex;
+	}
+	
+	// If none of the symbols match it is an invalid symbol (4. Invalid Symbol).
+  	return -4;
+}
+
 lexeme *lexanalyzer(char *input, int printFlag)
 {
 	list = malloc(sizeof(lexeme) * MAX_NUMBER_TOKENS);
 	lex_index = 0;
 	
+	int inputIndex = 0;
+	
+	// Loop to go through the input file as long as we're not at EOF and there are no errors.
+	while (input[inputIndex] != '\0' && inputIndex >= 0)
+	{
+		// Check for whitespace and space character.
+	  	if (iscntrl(input[inputIndex]) || isspace(input[inputIndex]))
+		{
+			inputIndex++;
+			continue;
+		}
+		// Check if current Character in the input is a number.
+		else if (isdigit(input[inputIndex]))
+		{
+			inputIndex = numbertoken(input, inputIndex);
+			
+			// Handle case for (2. Number Length).
+			if (inputIndex == -2)
+			{
+        			printlexerror(2);
+	      			exit(1);
+			}
+			
+			// Handle case for (1. Invalid Identifier).
+			else if (inputIndex == -1)
+			{
+			  	printlexerror(1);	
+				exit(1);
+			}
+			
+			else
+			{
+				continue;
+			}
+		}
+		
+		else if (isalpha(input[inputIndex]))
+		{
+			inputIndex = alphatoken(input, inputIndex);
+			
+			// Handle case for (3. Identifier Length)
+			if (inputIndex == -3)
+			{
+			  	printlexerror(3);
+				exit(1);
+			}
+			
+			else
+			{
+				continue;
+			}
+		}
+		
+		else
+		{
+			inputIndex = symboltoken(input, inputIndex);
+			
+			// Handle case for (4. Invalid Symbol)
+			if (inputIndex == -4)
+			{
+			  	printlexerror(4);
+				exit(1);
+			}
+			
+			else
+			{
+				continue;
+			}
+		}
+	}
+  
 	if (printFlag)
 		printtokens();
 	list[lex_index++].type = -1;
-	
-	//Loop to go through the input file
 	return list;
 }
 
