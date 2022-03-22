@@ -297,14 +297,12 @@ lexeme *lexanalyzer(char *input, int printFlag)
 			if (inputIndex == -2)
 			{
         			printlexerror(2);
-	      			exit(1);
 			}
 			
 			// Handle case for (1. Invalid Identifier).
 			else if (inputIndex == -1)
 			{
 			  	printlexerror(1);	
-				exit(1);
 			}
 			
 			else
@@ -321,7 +319,6 @@ lexeme *lexanalyzer(char *input, int printFlag)
 			if (inputIndex == -3)
 			{
 			  	printlexerror(3);
-				exit(1);
 			}
 			
 			else
@@ -338,7 +335,6 @@ lexeme *lexanalyzer(char *input, int printFlag)
 			if (inputIndex == -4)
 			{
 			  	printlexerror(4);
-				exit(1);
 			}
 			
 			else
@@ -471,6 +467,7 @@ void printtokens()
 	printf("\n");
 }
 
+// Prints out error and stops program.
 void printlexerror(int type)
 {
 	if (type == 1)
@@ -485,5 +482,6 @@ void printlexerror(int type)
 		printf("Implementation Error: Unrecognized Error Type\n");
 	
 	free(list);
+	exit(1);
 	return;
 }
