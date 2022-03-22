@@ -48,9 +48,8 @@ int alphatoken(char *input)
             temp[tempindex++] = ' ';
         }
     }
-    char *words;
     //split up the words as individual strings
-    char *token = strtok(words , " \t\n\r");
+    char *token = strtok(temp , " \t\n\r");
     while( token != NULL ) {
       reservedcheck(token);
  //Check if identifier length is greater than 11; returns 3 if identifier is out of range.
