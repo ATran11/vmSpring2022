@@ -140,60 +140,46 @@ int numbertoken(char * input, int inputIndex)
 // Check for special symbols.
 int symboltoken(char * input, int inputIndex)
 {
-	// Create temp array to hold symbols.
-  	char buffer[] = {input[inputIndex], '\0'};
+
   
 	switch (input[inputIndex])
 	{
 		case '.':
-      		strcpy(list[lex_index].name, buffer);
 			list[lex_index++].type = periodsym;
 			return ++inputIndex;
 		case '[':
-      		strcpy(list[lex_index].name, buffer);
 			list[lex_index++].type = lbracketsym;
 			return ++inputIndex;
 		case ']':
-      		strcpy(list[lex_index].name, buffer);
 			list[lex_index++].type = rbracketsym;
 			return ++inputIndex;
 		case ',':
-      		strcpy(list[lex_index].name, buffer);
 			list[lex_index++].type = commasym;
 			return ++inputIndex;
 		case ';':
-      		strcpy(list[lex_index].name, buffer);
 			list[lex_index++].type = semicolonsym;
 			return ++inputIndex;
 		case ':':
 			if (input[inputIndex + 1] == '=')
 			{
-        		char tempString[] = {':', '=', '\0'};
-        		strcpy(list[lex_index].name, tempString);
 				list[lex_index++].type = assignsym;
 				return inputIndex + 2;
 			}
-
-      		strcpy(list[lex_index].name, buffer);
+      		
 			list[lex_index++].type = colonsym;
 			return ++inputIndex;
 		case '?':
-      		strcpy(list[lex_index].name, buffer);
 			list[lex_index++].type = questionsym;
 			return ++inputIndex;
 		case '(':
-      		strcpy(list[lex_index].name, buffer);
 			list[lex_index++].type = lparenthesissym;
 			return ++inputIndex;
 		case ')':
-      		strcpy(list[lex_index].name, buffer);
 			list[lex_index++].type = rparenthesissym;
 			return ++inputIndex;
 		case '=':
 			if (input[inputIndex + 1] == '=')
 			{
-        		char tempString[] = {'=', '=', '\0'};
-        		strcpy(list[lex_index].name, tempString);
 				list[lex_index++].type = eqlsym;
 				return inputIndex + 2;
 			}
@@ -202,45 +188,38 @@ int symboltoken(char * input, int inputIndex)
 		case '<':
 			if (input[inputIndex + 1] == '>')
 			{
-        		char tempString[] = {'<', '>', '\0'};
-        		strcpy(list[lex_index].name, tempString);
 				list[lex_index++].type = neqsym;
 				return inputIndex + 2;
 			}
 			
 			if (input[inputIndex + 1] == '=')
 			{
-        		char tempString[] = {'<', '=', '\0'};
-        		strcpy(list[lex_index].name, tempString);
 				list[lex_index++].type = leqsym;
 				return inputIndex + 2;
 			}
-			
-      		strcpy(list[lex_index].name, buffer);
+      		
 			list[lex_index++].type = lsssym;
 			return ++inputIndex;
 		case '>':
 			if (input[inputIndex + 1] == '=')
 			{
-        		char tempString[] = {'>', '=', '\0'};
-        		strcpy(list[lex_index].name, tempString);
+        		
 				list[lex_index++].type = geqsym;
 				return inputIndex + 2;
 			}
 			
-      		strcpy(list[lex_index].name, buffer);
+      		
 			list[lex_index++].type = gtrsym;
 			return ++inputIndex;
 		case '+':
-      		strcpy(list[lex_index].name, buffer);
+      		
 			list[lex_index++].type = addsym;
 			return ++inputIndex;
 		case '-':
-      		strcpy(list[lex_index].name, buffer);
+      		
 			list[lex_index++].type = subsym;
 			return ++inputIndex;
 		case '*':
-      		strcpy(list[lex_index].name, buffer);
 			list[lex_index++].type = multsym;
 			return ++inputIndex;
 		case '/':
@@ -248,22 +227,21 @@ int symboltoken(char * input, int inputIndex)
 			if (input[inputIndex + 1] == '/')
 			{
 				++inputIndex;
-        		buffer[0] = input[inputIndex];
-        
+        		
 				while (input[inputIndex] != '\n' && input[inputIndex] != '\0')
 				{
 					++inputIndex;
-          			buffer[0] = input[inputIndex];
+          			
 				}
         
 				return inputIndex;
 			}
 			// Otherwise it's a divide symbol.
-      		strcpy(list[lex_index].name, buffer);
+      	
 			list[lex_index++].type = divsym;
 			return ++inputIndex;
 		case '%':
-      		strcpy(list[lex_index].name, buffer);
+      	
 			list[lex_index++].type = modsym;
 			return ++inputIndex;
 	}
