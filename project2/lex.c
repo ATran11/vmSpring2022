@@ -207,7 +207,6 @@ int symboltoken(char * input, int inputIndex)
 				list[lex_index++].type = geqsym;
 				return inputIndex + 2;
 			}
-			
       		
 			list[lex_index++].type = gtrsym;
 			return ++inputIndex;
@@ -236,7 +235,6 @@ int symboltoken(char * input, int inputIndex)
 				return inputIndex;
 			}
 			// Otherwise it's a divide symbol.
-      	
 			list[lex_index++].type = divsym;
 			return ++inputIndex;
 		case '%':
@@ -273,7 +271,7 @@ lexeme *lexanalyzer(char *input, int printFlag)
 			// Handle case for (2. Number Length).
 			if (inputIndex == -2)
 			{
-        			printlexerror(2);
+        		printlexerror(2);
 			}
 			
 			// Handle case for (1. Invalid Identifier).
@@ -283,7 +281,7 @@ lexeme *lexanalyzer(char *input, int printFlag)
 			}
 
 		}
-		
+		// Check if current Character in the input is a letter.
 		else if (isalpha(input[inputIndex]))
 		{
 			inputIndex = alphatoken(input, inputIndex);
@@ -295,7 +293,7 @@ lexeme *lexanalyzer(char *input, int printFlag)
 			}
 			
 		}
-		
+		// Otherwise current Character is a symbol.
 		else
 		{
 			inputIndex = symboltoken(input, inputIndex);
@@ -305,7 +303,6 @@ lexeme *lexanalyzer(char *input, int printFlag)
 			{
 			  	printlexerror(4);
 			}
-			
 		}
 	}
   
