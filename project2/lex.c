@@ -231,7 +231,6 @@ int symboltoken(char * input, int inputIndex)
 				while (input[inputIndex] != '\n' && input[inputIndex] != '\0')
 				{
 					++inputIndex;
-          			
 				}
         
 				return inputIndex;
@@ -282,11 +281,7 @@ lexeme *lexanalyzer(char *input, int printFlag)
 			{
 			  	printlexerror(1);	
 			}
-			
-			else
-			{
-				continue;
-			}
+
 		}
 		
 		else if (isalpha(input[inputIndex]))
@@ -299,10 +294,6 @@ lexeme *lexanalyzer(char *input, int printFlag)
 			  	printlexerror(3);
 			}
 			
-			else
-			{
-				continue;
-			}
 		}
 		
 		else
@@ -315,10 +306,6 @@ lexeme *lexanalyzer(char *input, int printFlag)
 			  	printlexerror(4);
 			}
 			
-			else
-			{
-				continue;
-			}
 		}
 	}
   
