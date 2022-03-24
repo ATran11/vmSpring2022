@@ -433,17 +433,30 @@ void printtokens()
 void printlexerror(int type)
 {
 	if (type == 1)
+	{
 		printf("Lexical Analyzer Error: Invalid Identifier\n");
+		exit(0);
+	}
 	else if (type == 2)
+	{
 		printf("Lexical Analyzer Error: Number Length\n");
+		exit(0);
+	}
 	else if (type == 3)
+	{
 		printf("Lexical Analyzer Error: Identifier Length\n");
+		exit(0);
+	}
 	else if (type == 4)
+	{
 		printf("Lexical Analyzer Error: Invalid Symbol\n");
+		exit(0);
+	}
 	else
+	{
 		printf("Implementation Error: Unrecognized Error Type\n");
-	
+		exit(0);
+	}
 	free(list);
-	exit(1);
 	return;
 }
