@@ -3,18 +3,21 @@
 #include <string.h>
 #include "compiler.h"
 
-#define MAX_CODE_LENGTH 150
+#define MAX_CODE_LENGTH 200
 #define MAX_SYMBOL_COUNT 50
-#define MAX_REG_HEIGHT 10
+#define MAX_REG_COUNT 10
 
+// generated code
 instruction *code;
 int cIndex;
+
+// symbol table
 symbol *table;
 int tIndex;
-int level;
 
-void emit(int opname, int level, int mvalue);
-void addToSymbolTable(int k, char n[], int v, int l, int a, int m);
+
+void emit(int opname, int reg, int level, int mvalue);
+void addToSymbolTable(int k, char n[], int s, int l, int a, int m);
 void mark();
 int multipledeclarationcheck(char name[]);
 int findsymbol(char name[], int kind);
@@ -24,42 +27,43 @@ void printassemblycode();
 
 instruction *parse(lexeme *list, int printTable, int printCode)
 {
+	// set up program variables
 	code = malloc(sizeof(instruction) * MAX_CODE_LENGTH);
+	cIndex = 0;
 	table = malloc(sizeof(symbol) * MAX_SYMBOL_COUNT);
 	tIndex = 0;
-	cIndex = 0;
 	
+	// print off table and code
 	if (printTable)
 		printsymboltable();
 	if (printCode)
 		printassemblycode();
 	
+	// mark the end of the code
 	code[cIndex].opcode = -1;
 	return code;
 }
 
-// adds a line of code to the program
-void emit(int opname, int level, int mvalue)
+void emit(int opname, int reg, int level, int mvalue)
 {
 	code[cIndex].opcode = opname;
+	code[cIndex].r = reg;
 	code[cIndex].l = level;
 	code[cIndex].m = mvalue;
 	cIndex++;
 }
 
-// add a symbol to the symbol table
-void addToSymbolTable(int k, char n[], int v, int l, int a, int m)
+void addToSymbolTable(int k, char n[], int s, int l, int a, int m)
 {
 	table[tIndex].kind = k;
 	strcpy(table[tIndex].name, n);
-	table[tIndex].val = v;
+	table[tIndex].size = s;
 	table[tIndex].level = l;
 	table[tIndex].addr = a;
 	table[tIndex].mark = m;
 	tIndex++;
 }
 
-// mark the symbols belonging to the current procedure, should be called at the end of block
 void mark()
 {
 	int i;
@@ -73,8 +77,6 @@ void mark()
 	}
 }
 
-// checks if a new symbol has a valid name, by checking if there's an existing symbol
-// with the same name in the procedure
 int multipledeclarationcheck(char name[])
 {
 	int i;
@@ -84,9 +86,6 @@ int multipledeclarationcheck(char name[])
 	return -1;
 }
 
-// returns the index of a symbol with a given name and kind in the symbol table
-// returns -1 if not found
-// prioritizes lower lex levels
 int findsymbol(char name[], int kind)
 {
 	int i;
@@ -114,61 +113,73 @@ void printparseerror(int err_code)
 			printf("Parser Error: Program must be closed by a period\n");
 			break;
 		case 2:
-			printf("Parser Error: Constant declarations should follow the pattern 'ident := number {, ident := number}'\n");
+			printf("Parser Error: Symbol names must be identifiers\n");
 			break;
 		case 3:
-			printf("Parser Error: Variable declarations should follow the pattern 'ident {, ident}'\n");
-			break;
-		case 4:
-			printf("Parser Error: Procedure declarations should follow the pattern 'ident ;'\n");
-			break;
-		case 5:
-			printf("Parser Error: Variables must be assigned using :=\n");
-			break;
-		case 6:
-			printf("Parser Error: Only variables may be assigned to or read\n");
-			break;
-		case 7:
-			printf("Parser Error: call must be followed by a procedure identifier\n");
-			break;
-		case 8:
-			printf("Parser Error: if must be followed by then\n");
-			break;
-		case 9:
-			printf("Parser Error: while must be followed by do\n");
-			break;
-		case 10:
-			printf("Parser Error: Relational operator missing from condition\n");
-			break;
-		case 11:
-			printf("Parser Error: Arithmetic expressions may only contain arithmetic operators, numbers, parentheses, constants, and variables\n");
-			break;
-		case 12:
-			printf("Parser Error: ( must be followed by )\n");
-			break;
-		case 13:
-			printf("Parser Error: Multiple symbols in variable and constant declarations must be separated by commas\n");
-			break;
-		case 14:
-			printf("Parser Error: Symbol declarations should close with a semicolon\n");
-			break;
-		case 15:
-			printf("Parser Error: Statements within begin-end must be separated by a semicolon\n");
-			break;
-		case 16:
-			printf("Parser Error: begin must be followed by end\n");
-			break;
-		case 17:
-			printf("Parser Error: Bad arithmetic\n");
-			break;
-		case 18:
 			printf("Parser Error: Confliciting symbol declarations\n");
 			break;
-		case 19:
+		case 4:
+			printf("Parser Error: Array sizes must be given as a single, nonzero number\n");
+			break;
+		case 5:
+			printf("Parser Error: [ must be followed by ]\n");
+			break;
+		case 6:
+			printf("Parser Error: Multiple symbols in var declaration must be separated by commas\n");
+			break;
+		case 7:
+			printf("Parser Error: Symbol declarations should close with a semicolon\n");
+			break;
+		case 8:
+			printf("Parser Error: Procedure declarations should contain a semicolon before the body of the procedure begins\n");
+			break;
+		case 9:
+			printf("Parser Error: Procedures may not be assigned to, read, or used in arithmetic\n");
+			break;
+		case 10:
 			printf("Parser Error: Undeclared identifier\n");
 			break;
-		case 20:
+		case 11:
+			printf("Parser Error: Variables cannot be indexed\n");
+			break;
+		case 12:
+			printf("Parserr Error: Arrays must be indexed\n");
+			break;
+		case 13:
+			printf("Parser Error: Assignment operator missing\n");
+			break;
+		case 14:
 			printf("Parser Error: Register Overflow Error\n");
+			break;
+		case 15:
+			printf("Parser Error: call must be followed by a procedure identifier\n");
+			break;
+		case 16:
+			printf("Parser Error: Statements within begin-end must be separated by a semicolon\n");
+			break;
+		case 17:
+			printf("Parser Error: begin must be followed by end\n");
+			break;
+		case 18:
+			printf("Parser Error: if must be followed by ?\n");
+			break;
+		case 19:
+			printf("Parser Error: do must be followed by while\n");
+			break;
+		case 20:
+			printf("Parser Error: read must be followed by a var or array identifier\n");
+			break;
+		case 21:
+			printf("Parser Error: Relational operator missing from condition\n");
+			break;
+		case 22:
+			printf("Parser Error: Bad arithmetic\n");
+			break;
+		case 23:
+			printf("Parser Error: ( must be followed by )\n");
+			break;
+		case 24:
+			printf("Parser Error: Arithmetic expressions may only contain arithmetic operators, numbers, parentheses, and variables\n");
 			break;
 		default:
 			printf("Implementation Error: unrecognized error code\n");
@@ -183,10 +194,10 @@ void printsymboltable()
 {
 	int i;
 	printf("Symbol Table:\n");
-	printf("Kind | Name        | Value | Level | Address | Mark\n");
+	printf("Kind | Name        | Size | Level | Address | Mark\n");
 	printf("---------------------------------------------------\n");
 	for (i = 0; i < tIndex; i++)
-		printf("%4d | %11s | %5d | %5d | %5d | %5d\n", table[i].kind, table[i].name, table[i].val, table[i].level, table[i].addr, table[i].mark); 
+		printf("%4d | %11s | %5d | %4d | %5d | %5d\n", table[i].kind, table[i].name, table[i].size, table[i].level, table[i].addr, table[i].mark); 
 	
 	free(table);
 	table = NULL;
@@ -195,7 +206,7 @@ void printsymboltable()
 void printassemblycode()
 {
 	int i;
-	printf("Line\tOP Code\tOP Name\tL\tM\n");
+	printf("Line\tOP Code\tOP Name\tR\tL\tM\n");
 	for (i = 0; i < cIndex; i++)
 	{
 		printf("%d\t", i);
@@ -206,48 +217,7 @@ void printassemblycode()
 				printf("LIT\t");
 				break;
 			case 2:
-				switch (code[i].m)
-				{
-					case 0:
-						printf("RET\t");
-						break;
-					case 1:
-						printf("NEG\t");
-						break;
-					case 2:
-						printf("ADD\t");
-						break;
-					case 3:
-						printf("SUB\t");
-						break;
-					case 4:
-						printf("MUL\t");
-						break;
-					case 5:
-						printf("DIV\t");
-						break;
-					case 6:
-						printf("EQL\t");
-						break;
-					case 7:
-						printf("NEQ\t");
-						break;
-					case 8:
-						printf("LSS\t");
-						break;
-					case 9:
-						printf("LEQ\t");
-						break;
-					case 10:
-						printf("GTR\t");
-						break;
-					case 11:
-						printf("GEQ\t");
-						break;
-					default:
-						printf("err\t");
-						break;
-				}
+				printf("RET\t");
 				break;
 			case 3:
 				printf("LOD\t");
@@ -268,28 +238,57 @@ void printassemblycode()
 				printf("JPC\t");
 				break;
 			case 9:
-				switch (code[i].m)
-				{
-					case 1:
-						printf("WRT\t");
-						break;
-					case 2:
-						printf("RED\t");
-						break;
-					case 3:
-						printf("HAL\t");
-						break;
-					default:
-						printf("err\t");
-						break;
-				}
+				printf("WRT\t");
+				break;
+			case 10:
+				printf("RED\t");
+				break;
+			case 11:
+				printf("HLT\t");
+				break;
+			case 12:
+				printf("NEG\t");
+				break;
+			case 13:
+				printf("ADD\t");
+				break;
+			case 14:
+				printf("SUB\t");
+				break;
+			case 15:
+				printf("MUL\t");
+				break;
+			case 16:
+				printf("DIV\t");
+				break;
+			case 17:
+				printf("MOD\t");
+				break;
+			case 18:
+				printf("EQL\t");
+				break;
+			case 19:
+				printf("NEQ\t");
+				break;
+			case 20:
+				printf("LSS\t");
+				break;
+			case 21:
+				printf("LEQ\t");
+				break;
+			case 22:
+				printf("GTR\t");
+				break;
+			case 23:
+				printf("GEQ\t");
 				break;
 			default:
 				printf("err\t");
 				break;
 		}
-		printf("%d\t%d\n", code[i].l, code[i].m);
+		printf("%d\t%d\t%d\n", code[i].r, code[i].l, code[i].m);
 	}
+	
 	if (table != NULL)
 		free(table);
 }
