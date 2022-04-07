@@ -1,3 +1,7 @@
+// Anthony Tran
+// Gabriel De David
+// Gani Begawala
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -25,6 +29,17 @@ void printparseerror(int err_code);
 void printsymboltable();
 void printassemblycode();
 
+// Parse Functions
+void program(lexeme* list);
+void block(lexeme* list);
+int varDeclaration(lexeme* list);
+int procDeclaration(lexeme* list);
+void statement(lexeme* list);
+void condition(lexeme* list);
+void expression(lexeme* list);
+void term(lexeme* list);
+void factor(lexeme* list);
+
 instruction *parse(lexeme *list, int printTable, int printCode)
 {
 	// set up program variables
@@ -42,6 +57,67 @@ instruction *parse(lexeme *list, int printTable, int printCode)
 	// mark the end of the code
 	code[cIndex].opcode = -1;
 	return code;
+}
+
+void program(lexeme* list)
+{
+	// emit JMP-7 (M = 0, because we don’t know where main code starts)
+	emit(7, 0, 0, 0);
+
+	// add to symbol table
+	addToSymbolTable(3, "main", 0, 0, 0, 0);
+
+	level = -1;
+
+	block(list);
+
+	// emit HALT
+	emit(11, 0, 0, 0);
+
+	// Fix the M values of the CAL instructions
+
+	// Fix M value of the initial JMP instruction
+
+}
+
+void block(lexeme* list)
+{
+
+}
+
+int varDeclaration(lexeme* list)
+{
+	return 0;
+}
+
+int procDeclaration(lexeme* list)
+{
+
+}
+
+void statement(lexeme* list)
+{
+
+}
+
+void condition(lexeme* list)
+{
+
+}
+
+void expression(lexeme* list)
+{
+
+}
+
+void term(lexeme* list)
+{
+
+}
+
+void factor(lexeme* list)
+{
+
 }
 
 void emit(int opname, int reg, int level, int mvalue)
