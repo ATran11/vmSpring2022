@@ -82,7 +82,29 @@ void program(lexeme* list)
 
 void block(lexeme* list)
 {
-
+	// Increment a level
+	level++;
+	
+	// Store tIndx -1 in a variable
+	int procedureidx = tIndex - 1
+	
+	// Store var - declaration() in variable x to call later on 
+	int x = var-declaration();
+	
+	procedure-declaration();
+	
+	//Add it to the array
+	table[procedureidx].addr = cIndex;
+	
+	// Call emit
+	emit INC (6, 0, 0, M = x)
+		
+	statement();
+	
+	mark();
+	
+	//Decrement a level
+	level--;
 }
 
 int varDeclaration(lexeme* list)
