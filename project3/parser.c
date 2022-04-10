@@ -19,6 +19,8 @@ int cIndex;
 symbol *table;
 int tIndex;
 
+// global variables
+int level;
 
 void emit(int opname, int reg, int level, int mvalue);
 void addToSymbolTable(int k, char n[], int s, int l, int a, int m);
@@ -47,20 +49,7 @@ instruction *parse(lexeme *list, int printTable, int printCode)
 	cIndex = 0;
 	table = malloc(sizeof(symbol) * MAX_SYMBOL_COUNT);
 	tIndex = 0;
-	
-	// print off table and code
-	if (printTable)
-		printsymboltable();
-	if (printCode)
-		printassemblycode();
-	
-	// mark the end of the code
-	code[cIndex].opcode = -1;
-	return code;
-}
 
-void program(lexeme* list)
-{
 	// emit JMP-7 (M = 0, because we don’t know where main code starts)
 	emit(7, 0, 0, 0);
 
@@ -71,13 +60,36 @@ void program(lexeme* list)
 
 	block(list);
 
+	// Check for error 1
+	if (list[tokenIndex].type != periodsym)
+	{
+		printparseerror(1);
+	}
+
 	// emit HALT
 	emit(11, 0, 0, 0);
 
-	// Fix the M values of the CAL instructions
-
 	// Fix M value of the initial JMP instruction
+	code[0].m = table[0].addr;
 
+	// Fix the M values of the CAL instructions
+	for (int i = 0; i < cIndex; i++)
+	{
+		if (code[i].opcode == 5)
+		{
+			code[i].m = table[code[i].m].addr;
+		}
+	}
+	
+	// print off table and code
+	if (printTable)
+		printsymboltable();
+	if (printCode)
+		printassemblycode();
+	
+	// mark the end of the code
+	code[cIndex].opcode = -1;
+	return code;
 }
 
 void block(lexeme* list)
