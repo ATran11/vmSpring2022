@@ -101,17 +101,18 @@ void block(lexeme* list)
 	int procedureidx = tIndex - 1
 	
 	// Store var - declaration() in variable x to call later on 
-	int x = var-declaration();
+	int x = varDeclaration(list);
 	
-	procedure-declaration();
+	// procedure declaration
+	procDeclaration(list);
 	
 	//Add it to the array
 	table[procedureidx].addr = cIndex;
 	
 	// Call emit
-	emit INC (6, 0, 0, M = x)
+	emit INC (6, 0, 0, x + 1);
 		
-	statement();
+	statement(list);
 	
 	mark();
 	
