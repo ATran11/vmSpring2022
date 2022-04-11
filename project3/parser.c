@@ -37,7 +37,7 @@ void printassemblycode();
 void program(lexeme* list);
 void block(lexeme* list);
 int varDeclaration(lexeme* list);
-int procDeclaration(lexeme* list);
+void procDeclaration(lexeme* list);
 void statement(lexeme* list);
 void condition(lexeme* list);
 void expression(lexeme* list);
@@ -134,7 +134,6 @@ int varDeclaration(lexeme* list)
 	if (list[listIdx].type == varsym)
 	{
 		
-
 		do
 		{
 			listIdx++;
@@ -214,9 +213,51 @@ int varDeclaration(lexeme* list)
 	return 0;
 }
 
-int procDeclaration(lexeme* list)
+void procDeclaration(lexeme* list)
 {
+	char symbolName[20] = "\0";
 
+	while (list[listIdx].type == procsym)
+	{
+		listIdx++;
+
+		if (list[listIdx].type != identsym)
+		{
+			printparseerror(2);
+			return;
+		}
+
+		else if (multipledeclarationcheck(list[listIdx].name) != -1)
+		{
+			printparseerror(3);
+			return;
+		}
+
+		strcpy(list[listIdx].name, symbolName);
+		listIdx++;
+
+		if (list[listIdx].type != semicolonsym)
+		{
+			printparseerror(8);
+			return;
+		}
+
+		listIdx++;
+		addToSymbolTable(3, symbolName, 0, level, 0, 0);
+		block(list);
+
+		if (list[listIdx].type != semicolonsym)
+		{
+			printparseerror(7);
+			return;
+		}
+
+		listIdx++;
+
+		// emit RET
+		emit(2, 0, 0, 0); 
+
+	}
 }
 
 void statement(lexeme* list)
