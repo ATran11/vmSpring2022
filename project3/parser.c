@@ -21,6 +21,8 @@ int tIndex;
 
 // global variables
 int level;
+int listIdx = 0;
+
 
 void emit(int opname, int reg, int level, int mvalue);
 void addToSymbolTable(int k, char n[], int s, int l, int a, int m);
@@ -61,7 +63,7 @@ instruction *parse(lexeme *list, int printTable, int printCode)
 	block(list);
 
 	// Check for error 1
-	if (list[tokenIndex].type != periodsym)
+	if (list[listIdx].type != periodsym)
 	{
 		printparseerror(1);
 	}
@@ -92,6 +94,7 @@ instruction *parse(lexeme *list, int printTable, int printCode)
 	return code;
 }
 
+
 void block(lexeme* list)
 {
 	// Increment a level
@@ -110,7 +113,7 @@ void block(lexeme* list)
 	table[procedureidx].addr = cIndex;
 	
 	// Call emit
-	emit INC (6, 0, 0, x + 1);
+	emit INC (6, 0, 0, x);
 		
 	statement(list);
 	
@@ -122,6 +125,92 @@ void block(lexeme* list)
 
 int varDeclaration(lexeme* list)
 {
+	int memSize = 3;
+
+	char symbolName[20] = "\0";
+
+	int arrSize = 0;
+
+	if (list[listIdx].type == varsym)
+	{
+		
+
+		do
+		{
+			listIdx++;
+
+			if (list[listIdx].type != identsym)
+			{
+				printparseerror(2);
+				return 0;
+			}
+
+			if (multipledeclarationcheck(list[listIdx].name) != -1)
+			{
+				printparseerror(3);
+				return 0;
+			}
+
+			strcpy(list[listIdx].name, symbolName);
+
+			listIdx++;
+
+			if (list[listIdx].type == lbracketsym)
+			{
+				listIdx++;
+
+				if (list[listIdx].type != numbersym || list[listIdx].value == 0)
+				{
+					printparseerror(4);
+				}
+
+				arrSize = list[listIdx].value;
+
+				listIdx++;
+
+				if (list[listIdx].type == multsym || list[listIdx].type == divsym || list[listIdx].type == modsym || list[listIdx].type == addsym || list[listIdx].type == subsym)
+				{
+					printparseerror(4);
+				}
+				else if (list[listIdx].type != rbracketsym)
+				{
+					printparseerror(5);
+				}
+
+				listIdx++;
+
+				addToSymbolTable(2, symbolName, arrSize, level, memSize, 0);
+
+				memSize += arrSize;
+			}
+			else
+			{
+				// This is for a var.
+
+				addToSymbolTable(1, symbolName, 0, level, memSize, 0);
+
+				memSize++;
+			}
+		} while (list[listIdx].type == commasym);
+
+		if (list[listIdx].type == identsym)
+		{
+			printparseerror(6);
+			return 0;
+		}
+
+		else if (list[listIdx].type != semicolonsym)
+		{
+			printparseerror(7);
+		}
+
+		listIdx++;
+	}
+	else
+	{
+		return memSize;
+	}
+
 	return 0;
 }
 
