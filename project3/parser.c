@@ -262,7 +262,121 @@ void procDeclaration(lexeme* list)
 
 void statement(lexeme* list)
 {
+int symbolName;
 
+	symbolName = list[listIdx].name;
+	
+	listIdx++;
+
+	if(list[listIdx].type == lbracketsym) {
+		listIdx++;
+		int sym  = findsymbol(symbolName, 2);
+		if(sym == -1)
+			if(findsymbol(symbolName,1) != -1) {
+				printparseerror(11);
+				return 0;
+			}
+			if(findsymbol(symbolName,3) != -1) {
+				printparseerror(9);
+				return 0;
+			}
+			else {
+				printparseerror(10);
+				return 0;
+			}
+
+			expression(list);
+			if(list[listIdx].type != rbracketsym) {
+				printparseerror(5);
+				return 0;
+			}
+			listIdx++;
+			if(list[listIdx].type != assignsym) {
+				printparseerror(13);
+				return 0;
+			}
+			listIdx++;
+			expression(list);
+			
+	}
+	else {
+		int sym = findsymbol(symbolName, 1);
+		if(sym == -1)
+			if(findsymbol(symbolName,2) != -1) {
+				printparseerror(12);
+				return 0;
+			}
+			if(findsymbol(symbolName,3) != -1) {
+				printparseerror(9);
+				return 0;
+			}
+			else {
+				printparseerror(10);
+				return 0;
+			}
+
+			if(list[listIdx].type != assignsym) {
+				printparseerror(13);
+				return 0;
+			}
+			listIdx++;
+			expression(list);
+	}
+
+
+
+	//read
+		listIdx++;
+
+		if(list[listIdx].type != identsym) {
+			printparseerror(20);
+			return 0;
+		}
+
+		symbolName = list[listIdx].name;
+		listIdx++;	
+
+		if(list[listIdx].type == lbracketsym) {
+			listIdx++;
+			int sym  = findsymbol(symbolName, 2);
+			if(sym == -1)
+				if(findsymbol(symbolName,1) != -1) {
+					printparseerror(11);
+					return 0;
+				}
+				if(findsymbol(symbolName,3) != -1) {
+					printparseerror(9);
+					return 0;
+				}
+				else {
+					printparseerror(10);
+					return 0;
+				}
+			
+			expression(list);
+			if(list[listIdx].type != rbracketsym) {
+				printparseerror(5);
+				return 0;
+			}
+			listIdx++;
+			
+		}
+		else {
+			int sym = findsymbol(symbolName, 1);
+			if(sym == -1)
+				if(findsymbol(symbolName,2) != -1) {
+					printparseerror(12);
+					return 0;
+				}
+				if(findsymbol(symbolName,3) != -1) {
+					printparseerror(9);
+					return 0;
+				}
+				else {
+					printparseerror(10);
+					return 0;
+				}
+		}
 }
 
 void condition(lexeme* list)
@@ -282,7 +396,66 @@ void term(lexeme* list)
 
 void factor(lexeme* list)
 {
-
+	if(list[listIdx].type == identsym) {
+		symbolName = list[listIdx].name;
+		listIdx++;
+		if(list[listIdx] == lbracketsym)
+			listIdx++;
+			int sym  = findsymbol(symbolName, 2);
+			if(sym == -1)
+				if(findsymbol(symbolName,1) != -1) {
+					printparseerror(11);
+					return 0;
+				}
+				if(findsymbol(symbolName,3) != -1) {
+					printparseerror(9);
+					return 0;
+				}
+				else {
+					printparseerror(10);
+					return 0;
+				}
+			
+			expression(list);
+			if(list[listIdx].type != rbracketsym) {
+				printparseerror(5);
+				return 0;
+			}
+			listIdx++;
+	}
+	else {
+		int sym = findsymbol(symbolName, 1);
+		if(sym == -1)
+			if(findsymbol(symbolName,2) != -1) {
+				printparseerror(12);
+				return 0;
+			}
+			if(findsymbol(symbolName,3) != -1) {
+				printparseerror(9);
+				return 0;
+			}
+			else {
+				printparseerror(10);
+				return 0;
+			}
+	}
+	else if(list[listIdx].type == numbersym) {
+		emit LIT(1, R, 0, M = list[listIdx].value)
+		listIdx++;
+	}
+	else if(list[listIdx].type == lparenthesissym) {
+		listIdx++;
+		expression(list);
+		if(list[listIdx].type != rparenthesissym) {
+			printparseerror(23); 
+			return 0;
+		}
+		listIdx++;
+	}
+	else {
+		printparseerror(24);
+		return 0;
+	}
 }
 
 void emit(int opname, int reg, int level, int mvalue)
