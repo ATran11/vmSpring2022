@@ -113,7 +113,7 @@ void block(lexeme* list)
 	table[procedureidx].addr = cIndex;
 	
 	// Call emit
-	emit INC (6, 0, 0, x);
+	emit(6, 0, 0, x);
 		
 	statement(list);
 	
