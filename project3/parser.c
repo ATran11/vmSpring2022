@@ -544,17 +544,137 @@ void statement(lexeme* list)
 
 void condition(lexeme* list)
 {
-
+     expression(list);
+     if (list[listIdx] == eqlsym)
+     {
+	listIdx++;
+	expression(list);
+	emit(18, registerCounter - 1, registerCounter - 1, registerCounter); // emit EQL
+	registerCounter--;     
+     }   
+     else if (list[listIdx] == neqsym)
+     {
+	listIdx++;
+	expression(list);
+	emit(19, registerCounter - 1, registerCounter - 1, registerCounter); // emit NEQ
+	registerCounter--;     
+     } 
+	else if (list[listIdx] == lsssym)
+     {
+	listIdx++;
+	expression(list);
+	emit(20, registerCounter - 1, registerCounter - 1, registerCounter); // emit LSS
+	registerCounter--;     
+     } 
+	else if (list[listIdx] == leqsym)
+     {
+	listIdx++;
+	expression(list);
+	emit(21, registerCounter - 1, registerCounter - 1, registerCounter); // emit LEQ
+	registerCounter--;     
+     } 
+	else if (list[listIdx] == gtrsym)
+     {
+	listIdx++;
+	expression(list);
+	emit(22, registerCounter - 1, registerCounter - 1, registerCounter); // emit GTR
+	registerCounter--;     
+     } 
+	else if (list[listIdx] == geqsym)
+     {
+	listIdx++;
+	expression(list);
+	emit(23, registerCounter - 1, registerCounter - 1, registerCounter); // emit GEQ
+	registerCounter--;     
+     } 
+	else
+	{
+		printparseerror(21);
+		return 0;
+	}	
 }
 
 void expression(lexeme* list)
 {
-
+   if(list[listIdx] == subsym)
+   {
+	listInd++;
+	term(list);
+	emit(12, registerCounter, 0, registerCounter); // emit NEG
+	while(list[listIdx] == addsym || list[listIdx] == subsym)
+	{
+		if(list[listidx] == addsym)
+		{
+			listIdx++;
+			term(list);
+			emit(13, registerCounter - 1, registerCounter - 1, registerCounter); // emit ADD
+			registerCounter--;
+		}
+		else
+		{
+			listIdx++;
+			term(list);
+			emit(14, registerCounter - 1, registerCounter - 1, registerCounter); // emit SUB
+			registerCounter--;
+		}	
+	}	
+   }
+   else
+   {
+	term(list);
+	while(list[listIdx] == addsym || list[listIdx] == subsym)
+	{
+		if(list[listidx] == addsym)
+		{
+			listIdx++;
+			term(list);
+			emit(13, registerCounter - 1, registerCounter - 1, registerCounter); // emit ADD
+			registerCounter--;
+		}
+		else
+		{
+			listIdx++;
+			term(list);
+			emit(14, registerCounter - 1, registerCounter - 1, registerCounter); // emit SUB
+			registerCounter--;
+		}	
+	}	
+	   
+   }
+  if(list[listIdx] == lparenthesissym || list[listIdx] == identsym || list[listIdx] == numbersym)
+  {
+	  printparseerror(22);	   
+	  return 0;
+  }
 }
 
 void term(lexeme* list)
 {
-
+   factor(list);
+   while(list[listIdx] == multsym || list[listIdx] == divsym ||	list[listIdx] == modsym)
+   {
+	if(list[listIdx] == multsym)
+	{
+	 listIdx++;
+	 factor(list);
+	 emit(15, registerCounter -1, registerCounter -1, registerCounter); // emit MUL
+	 registerCounter--;
+	}
+	else if(list[listIdx] == divsym)
+	{
+	 listIdx++;
+	 factor(list);
+	 emit(16, registerCounter -1, registerCounter -1, registerCounter);  // emit DIV
+	 registerCounter--;
+	}
+	else
+	{
+	 listIdx++;
+	 factor(list);
+	 emit(17, registerCounter -1, registerCounter -1, registerCounter); // emit MOD
+	 registerCounter--;
+	}
+   }	   
 }
 
 void factor(lexeme* list)
