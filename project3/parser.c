@@ -273,7 +273,7 @@ void statement(lexeme* list)
 
 	//assignment
 	// check for assignment statement
-	if(){
+	if(list[listIdx]==identsym){
 		symbolName = list[listIdx].name;
 		listIdx++;
 		if(list[listIdx].type == lbracketsym) {
@@ -353,7 +353,7 @@ void statement(lexeme* list)
 	}
 	//call
 	//check for call-statement
-	if(){	
+	if(list[listIdx] == callsym){	
 		listIdx++;
 		if(list[listIdx].type != identsym){
 			printparseerror(15);
@@ -376,7 +376,7 @@ void statement(lexeme* list)
 	
 	//begin-end
 	//check for begin-end statement
-	if(){
+	if(list[listIdx]==beginsym){
 		do{
 			listIdx;
 			statement(list);
@@ -397,7 +397,7 @@ void statement(lexeme* list)
 	}
 	//if
 	// check for if-statement
-	if(){
+	if(list[listIdx]==ifsym){
 		listIdx++;
 		condition(list);
 		jpcIdx = cIndex;
@@ -424,7 +424,7 @@ void statement(lexeme* list)
 
 	//do-while
 	// check for do-while statement
-	if(){
+	if(list[listIdx]==whilesym){
 		listIdx++;
 		loopIdx = cIndex;
 		statement(list);
@@ -447,7 +447,7 @@ void statement(lexeme* list)
 
 	//read
 	// check for read statement
-	if(){
+	if(list[listIdx]==readsym){
 		listIdx++;
 
 		if(list[listIdx].type != identsym) {
@@ -534,7 +534,7 @@ void statement(lexeme* list)
 	}
 	//write
 	//Check for write statements
-	if(){
+	if(list[listIdx]==writesym){
 		listIdx++;
 		expression(list);
 		emit WRT(9, registerCounter, 0, 0);//WRT
